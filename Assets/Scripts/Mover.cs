@@ -4,11 +4,6 @@ public class Mover : MonoBehaviour
 {
     [SerializeField] private float playerSpeed = 5f;
 
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
         Move();
