@@ -17,23 +17,31 @@ public class Alarm : MonoBehaviour
     {
         if (other.GetComponent<Rigidbody>() == true)
         {
-            _audioSource.Play();
             StartCoroutine(ChangeVolume(maxVolume));
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _audioSource.Stop();
-        _audioSource.volume = minVolume;
+        StartCoroutine(ChangeVolume(minVolume));
     }
 
     private IEnumerator ChangeVolume(float volume)
     {
+        if (volume > minVolume)
+        {
+            _audioSource.Play();
+        }
+
         while (Mathf.Approximately(_audioSource.volume, volume) == false)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, volume, volumeChangeSpeed * Time.deltaTime);
             yield return null;
+        }
+
+        if (volume < maxVolume)
+        {
+            _audioSource.Stop();
         }
     }
 }
