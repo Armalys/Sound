@@ -2,17 +2,20 @@ using UnityEngine;
 
 public class Mover : MonoBehaviour
 {
+    private const string Horizontal = "Horizontal";
+    private const string Vertical = "Vertical";
+
     [SerializeField] private float playerSpeed = 5f;
 
-    void Update()
+    private void Update()
     {
         Move();
     }
 
     private void Move()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x = Input.GetAxis(Horizontal);
+        float z = Input.GetAxis(Vertical);
 
         Vector3 movement = new Vector3(x, 0, z);
         transform.Translate(movement * playerSpeed * Time.deltaTime);
