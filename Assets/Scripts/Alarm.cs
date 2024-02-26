@@ -8,38 +8,49 @@ public class Alarm : MonoBehaviour
     [SerializeField] private float minVolume = 0f;
     [SerializeField] private float volumeChangeSpeed = 0.5f;
 
+    private Coroutine _volumeCoroutine;
+
+    public void TurnOn()
+    {
+        ManageSound(maxVolume);
+    }
+
+    public void TurnOff()
+    {
+        ManageSound(minVolume);
+    }
+
     private void Start()
     {
         _audioSource.volume = minVolume;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void ManageSound(float targetVolume)
     {
-        if (other.GetComponent<Rigidbody>() == true)
+        if (_volumeCoroutine != null)
         {
-            StartCoroutine(ChangeVolume(maxVolume));
+            StopCoroutine(_volumeCoroutine);
         }
+
+        _volumeCoroutine = StartCoroutine(ManageSoundCoroutine(targetVolume));
     }
 
-    private void OnTriggerExit(Collider other)
+    private IEnumerator ManageSoundCoroutine(float targetVolume)
     {
-        StartCoroutine(ChangeVolume(minVolume));
-    }
-
-    private IEnumerator ChangeVolume(float volume)
-    {
-        if (volume > minVolume)
+        if (targetVolume > minVolume)
         {
             _audioSource.Play();
         }
 
-        while (Mathf.Approximately(_audioSource.volume, volume) == false)
+        while (Mathf.Approximately(_audioSource.volume, targetVolume) == false)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, volume, volumeChangeSpeed * Time.deltaTime);
+            _audioSource.volume =
+                Mathf.MoveTowards(_audioSource.volume, targetVolume, volumeChangeSpeed * Time.deltaTime);
+
             yield return null;
         }
 
-        if (volume < maxVolume)
+        if (targetVolume < maxVolume)
         {
             _audioSource.Stop();
         }

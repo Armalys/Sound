@@ -5,7 +5,7 @@ public class Mover : MonoBehaviour
     private const string Horizontal = "Horizontal";
     private const string Vertical = "Vertical";
 
-    [SerializeField] private float playerSpeed = 5f;
+    [SerializeField] private float _playerSpeed = 5f;
 
     private void Update()
     {
@@ -18,6 +18,6 @@ public class Mover : MonoBehaviour
         float z = Input.GetAxis(Vertical);
 
         Vector3 movement = new Vector3(x, 0, z);
-        transform.Translate(movement * playerSpeed * Time.deltaTime);
+        transform.Translate(movement * _playerSpeed * Time.deltaTime);
     }
 }
